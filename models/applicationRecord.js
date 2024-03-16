@@ -1,5 +1,5 @@
 // Require the knex library and initialize it with the development settings from the knexfile.
-const knex = require("knex")(require("./db/knexfile.js").development);
+const knex = require("knex")(require("../knexfile").development);
 
 // The ApplicationRecord class acts as a base class for all models in your application.
 // It contains common operations for interacting with the database.

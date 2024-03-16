@@ -1,22 +1,24 @@
-const router = require("express").Router(),
-  { forgotPasswordEmail } = require("../../emails"),
-  User = require("../../db/models/user"),
-  bcrypt = require("bcryptjs");
+const router = require("express").Router();
+const User = require("../../models/user");
 
 // ***********************************************//
 // Login a user
 // ***********************************************//
 router.post("/login", async (req, res) => {
+  console.log(req.body);
   try {
     const user = await User.findByCredentials(
       req.body.email,
       req.body.password
     );
-    const token = await user.generateAuthToken();
+    console.log(user);
+    const token = await User.generateAuthToken(user);
+    console.log(token);
     res.cookie("jwt", token, {
       httpOnly: true,
       sameSite: "Strict",
     });
+    user.token = token;
     res.json(user);
   } catch (e) {
     res.status(400).send();

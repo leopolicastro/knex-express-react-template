@@ -1,7 +1,6 @@
 const Repl = require("repl");
 
-const User = require("../db/models/User.js");
-const Post = require("../db/models/Post.js");
+const User = require("../models/user.js");
 
 const prompt = "- $ ";
 
@@ -10,7 +9,6 @@ const repl = Repl.start({ prompt });
 
 // Add the models to the REPL context
 repl.context.User = User;
-repl.context.Post = Post;
 
 repl.on("exit", () => {
   process.exit();
