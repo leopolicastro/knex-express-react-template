@@ -8,7 +8,6 @@ const passport = require("passport"),
 // ******************************
 let jwtOptions = {
   jwtFromRequest: (req) => {
-    console.log(ExtractJwt.fromAuthHeaderWithScheme("Bearer")(req));
     return (
       req?.cookies?.jwt || ExtractJwt.fromAuthHeaderWithScheme("Bearer")(req)
     );

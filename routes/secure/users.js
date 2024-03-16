@@ -31,7 +31,7 @@ router.get("/me", async (req, res) => {
   delete response.password;
   delete response.created_at;
   delete response.updated_at;
-  res.json(response);
+  res.json(response).status(200);
 });
 
 module.exports = router;
