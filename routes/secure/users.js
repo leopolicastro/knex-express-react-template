@@ -1,16 +1,15 @@
 const express = require("express"),
-  router = new express.Router(),
-  User = require("../../models/user");
+  router = new express.Router();
 
 // ***********************************************//
 // Login Check
 // ***********************************************//
-router.post("/api/loginCheck", async (req, res) => res.sendStatus(200));
+router.post("/loginCheck", async (req, res) => res.sendStatus(200));
 
 // ***********************************************//
 // Logout a user
 // ***********************************************//
-router.post("/api/users/logout", async (req, res) => {
+router.post("/logout", async (req, res) => {
   try {
     req.user.tokens = req.user.tokens.filter((token) => {
       return token.token !== req.token;
@@ -27,8 +26,12 @@ router.post("/api/users/logout", async (req, res) => {
 // Get current user
 // ***********************************************//
 
-router.get("/api/users/me", async (req, res) => {
-  res.json(req.user);
+router.get("/me", async (req, res) => {
+  let response = req.user;
+  delete response.password;
+  delete response.created_at;
+  delete response.updated_at;
+  res.json(response);
 });
 
 module.exports = router;

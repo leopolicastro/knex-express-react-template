@@ -8,6 +8,7 @@ const passport = require("passport"),
 // ******************************
 let jwtOptions = {
   jwtFromRequest: (req) => {
+    console.log(ExtractJwt.fromAuthHeaderWithScheme("Bearer")(req));
     return (
       req?.cookies?.jwt || ExtractJwt.fromAuthHeaderWithScheme("Bearer")(req)
     );
@@ -23,6 +24,13 @@ passport.use(
     }
     let { iat, exp, ...userData } = jwtPayload;
     userData = await User.findBy({ id: userData.id });
+    if (!userData) {
+      return done(null, false, { message: "user not found" });
+    }
+    delete userData.password;
+    delete userData.created_at;
+    delete userData.updated_at;
+
     return done(null, userData);
   })
 );

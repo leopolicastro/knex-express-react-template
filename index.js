@@ -21,8 +21,10 @@ app.use(
   })
 );
 
+app.use("/users", userRoutes);
+
 app.get("/protected", (req, res) => {
-  res.send("Welcome to the protected route");
+  res.json({ user: req.user });
 });
 
 app.listen(PORT, () => {
