@@ -1,0 +1,21 @@
+{
+  "name": "lec-demo-knex-table-migrations",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "npx nodemon index.js",
+    "migrate": "knex migrate:latest",
+    "migrate:down": "knex migrate:down",
+    "migrate:rollback": "knex migrate:rollback",
+    "seed": "knex seed:run"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "knex": "^0.95.6",
+    "mysql2": "^3.9.2"
+  },
+  "devDependencies": {
+    "repl": "^0.1.3"
+  }
+}
