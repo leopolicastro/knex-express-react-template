@@ -10,14 +10,35 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, setCurrentUser } = useContext(AuthContext);
   const navigation = [];
 
-  if (!currentUser) {
-    navigation.push({ name: "Login", href: "/login", current: false });
-  } else {
+  if (currentUser) {
     navigation.push({ name: "Private", href: "/private", current: false });
+  } else {
+    navigation.push({ name: "Login", href: "/login", current: false });
   }
+
+  const handleSignout = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("/users/logout", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer " + JSON.parse(sessionStorage.getItem("user")).token,
+        },
+      });
+      if (response.ok) {
+        sessionStorage.removeItem("user");
+        setCurrentUser(null);
+        window.location.href = "/";
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -48,15 +69,21 @@ export default function Navbar() {
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
-                    {navigation.map((item) => (
+                    {currentUser ? (
                       <Link
+                        to="/private"
                         className="flex items-center text-2xl text-gray-50 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                        to={item.href}
-                        key={item.name}
                       >
-                        {item.name}
+                        Private
                       </Link>
-                    ))}
+                    ) : (
+                      <Link
+                        to="/login"
+                        className="flex items-center text-2xl text-gray-50 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                      >
+                        Login
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>
@@ -102,6 +129,7 @@ export default function Navbar() {
                                 active ? "bg-gray-100" : "",
                                 "block px-4 py-2 text-sm text-gray-700"
                               )}
+                              onClick={handleSignout}
                             >
                               Sign out
                             </a>
@@ -122,12 +150,7 @@ export default function Navbar() {
                   key={item.name}
                   as="a"
                   href={item.href}
-                  className={classNames(
-                    item.current
-                      ? "bg-gray-900 text-white"
-                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                    "block rounded-md px-3 py-2 text-base font-medium"
-                  )}
+                  className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
                   aria-current={item.current ? "page" : undefined}
                 >
                   {item.name}

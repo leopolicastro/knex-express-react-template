@@ -10,12 +10,8 @@ router.post("/loginCheck", async (req, res) => res.sendStatus(200));
 // ***********************************************//
 // Logout a user
 // ***********************************************//
-router.post("/logout", async (req, res) => {
+router.delete("/logout", async (req, res) => {
   try {
-    req.user.tokens = req.user.tokens.filter((token) => {
-      return token.token !== req.token;
-    });
-    await req.user.save();
     res.clearCookie("jwt");
     res.json({ message: "Logged out!" });
   } catch (e) {
@@ -26,7 +22,6 @@ router.post("/logout", async (req, res) => {
 // ***********************************************//
 // Get current user
 // ***********************************************//
-
 router.get("/me", async (req, res) => {
   let response = await User.asJson(req.user);
   res.json(response).status(200);

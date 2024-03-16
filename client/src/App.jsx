@@ -6,13 +6,15 @@ import Login from "./pages/Login";
 import Private from "./pages/Private";
 import Landing from "./pages/Landing";
 import Navbar from "./components/Navbar";
+import Alert from "./components/Alert";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, alert } = useContext(AuthContext);
   return (
     <div className="App">
       <Navbar />
+      {alert && <Alert />}
 
       <Routes>
         <Route index element={<Landing />} />

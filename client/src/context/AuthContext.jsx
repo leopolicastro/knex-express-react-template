@@ -1,19 +1,14 @@
-import React, { useState, useEffect, createContext } from "react";
+import { useState, useEffect, createContext } from "react";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [alert, setAlert] = useState(null);
   const user = sessionStorage.getItem("user");
 
   useEffect(() => {
-    console.log("user", user);
-    // if (!user) {
-    //   setCurrentUser(null);
-    //   window.location.href = "/login";
-    // }
-    // incase user refreshes local session is cleared.
     if (user && !currentUser) {
       fetch(`/users/me`, {
         method: "GET",
@@ -24,12 +19,11 @@ export const AuthProvider = ({ children }) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log("data", data);
           setCurrentUser(data);
         })
         .catch((error) => {
-          console.error("Error:", error);
           setCurrentUser(null);
+          sessionStorage.removeItem("user");
         });
     }
   }, [user, currentUser]);
@@ -41,6 +35,8 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser,
         loading,
         setLoading,
+        setAlert,
+        alert,
       }}
     >
       {children}

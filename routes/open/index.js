@@ -32,7 +32,7 @@ router.post("/", async (req, res) => {
       httpOnly: true,
       sameSite: "Strict",
     });
-    res.status(201).json({ user, token });
+    res.status(201).json(user);
   } catch (e) {
     res.status(400).send(e);
   }
