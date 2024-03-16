@@ -5,15 +5,12 @@ const User = require("../../models/user");
 // Login a user
 // ***********************************************//
 router.post("/login", async (req, res) => {
-  console.log(req.body);
   try {
     const user = await User.findByCredentials(
       req.body.email,
       req.body.password
     );
-    console.log(user);
     const token = await User.generateAuthToken(user);
-    console.log(token);
     res.cookie("jwt", token, {
       httpOnly: true,
       sameSite: "Strict",
@@ -21,19 +18,22 @@ router.post("/login", async (req, res) => {
     user.token = token;
     res.json(user);
   } catch (e) {
-    res.status(400).send();
+    res.status(400).send(e);
   }
 });
 
 // ***********************************************//
 // Create a user
 // ***********************************************//
-router.post("", async (req, res) => {
-  const user = new User(req.body);
+router.post("/", async (req, res) => {
+  const user = await User.create(req.body);
   try {
-    await user.save();
-    sendWelcomeEmail(user.email, user.name);
-    const token = await user.generateAuthToken();
+    const token = await User.generateAuthToken(user);
+    user.token = token;
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      sameSite: "Strict",
+    });
     res.status(201).json({ user, token });
   } catch (e) {
     res.status(400).send(e);

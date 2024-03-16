@@ -9,10 +9,4 @@ module.exports = {
       charset: "utf8",
     },
   },
-  seeds: {
-    directory: "./db/seeds",
-  },
-  migrations: {
-    directory: "./db/migrations",
-  },
 };

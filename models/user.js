@@ -8,7 +8,7 @@ class User extends ApplicationRecord {
 
   static async generateAuthToken(user) {
     const token = jwt.sign(
-      { _id: user.id.toString(), name: user.name },
+      { id: user.id.toString(), name: user.name },
       "supersecretprivatekey",
       { expiresIn: "24h" }
     );

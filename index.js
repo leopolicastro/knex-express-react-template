@@ -1,7 +1,9 @@
 const express = require("express");
 const app = express();
-const userRoutes = require("./routes/open/index");
+const openRoutes = require("./routes/open/index");
+const userRoutes = require("./routes/secure/users");
 const morgan = require("morgan");
+const passport = require("./middleware/authentication");
 
 const PORT = process.env.PORT || 5000;
 app.use(morgan("dev"));
@@ -11,7 +13,17 @@ app.get("/", (req, res) => {
   res.send("Welcome to my API");
 });
 
-app.use("/api/users", userRoutes);
+app.use("/users", openRoutes);
+
+app.use(
+  passport.authenticate("jwt", {
+    session: false,
+  })
+);
+
+app.get("/protected", (req, res) => {
+  res.send("Welcome to the protected route");
+});
 
 app.listen(PORT, () => {
   console.log(`running at http://localhost:${PORT}`);
