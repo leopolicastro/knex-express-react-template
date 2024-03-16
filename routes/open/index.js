@@ -6,15 +6,13 @@ const User = require("../../models/user");
 // ***********************************************//
 router.post("/login", async (req, res) => {
   try {
-    const user = await User.findByCredentials(
-      req.body.email,
-      req.body.password
-    );
+    let user = await User.findByCredentials(req.body.email, req.body.password);
     const token = await User.generateAuthToken(user);
     res.cookie("jwt", token, {
       httpOnly: true,
       sameSite: "Strict",
     });
+    user = User.asJson(user);
     user.token = token;
     res.json(user);
   } catch (e) {

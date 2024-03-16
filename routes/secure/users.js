@@ -1,4 +1,5 @@
 const express = require("express"),
+  User = require("../../models/user"),
   router = new express.Router();
 
 // ***********************************************//
@@ -27,10 +28,7 @@ router.post("/logout", async (req, res) => {
 // ***********************************************//
 
 router.get("/me", async (req, res) => {
-  let response = req.user;
-  delete response.password;
-  delete response.created_at;
-  delete response.updated_at;
+  let response = await User.asJson(req.user);
   res.json(response).status(200);
 });
 

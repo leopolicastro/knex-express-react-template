@@ -32,7 +32,6 @@ export default function Login() {
 
   useEffect(() => {
     if (currentUser) {
-      console.log("currentUser", currentUser);
       navigate("/");
     }
   }, [currentUser, navigate]);

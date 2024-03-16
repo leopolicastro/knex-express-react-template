@@ -26,9 +26,7 @@ passport.use(
     if (!userData) {
       return done(null, false, { message: "user not found" });
     }
-    delete userData.password;
-    delete userData.created_at;
-    delete userData.updated_at;
+    userData = User.asJson(userData);
 
     return done(null, userData);
   })
